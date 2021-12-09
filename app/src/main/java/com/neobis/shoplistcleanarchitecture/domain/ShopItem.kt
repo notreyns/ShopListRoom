@@ -2,7 +2,7 @@ package com.neobis.shoplistcleanarchitecture.domain
 
 data class ShopItem(
     val name: String,
-    val isActive: Boolean,
+    var isActive: Boolean,
     val counter: Int,
     var id: Int = UNDEFINED_ID
 ){
