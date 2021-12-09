@@ -19,14 +19,12 @@ class MainViewModel: ViewModel() {
 
 
     fun editShopItem(shopItem: ShopItem){
-        val newItem = shopItem.copy(isActive = !shopItem.isActive)
+        val newItem = shopItem.copy(isActive =  !shopItem.isActive)
         editShopItemUseCase.editItem(newItem)
-
     }
 
     fun deleteShopItem(shopItem: ShopItem){
         deleteItemUseCase.deleteItem(shopItem)
-
     }
 
 }

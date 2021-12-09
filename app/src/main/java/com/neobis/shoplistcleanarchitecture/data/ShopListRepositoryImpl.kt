@@ -11,6 +11,13 @@ object ShopListRepositoryImpl: ShopListRepository {
     private var shopListLD= MutableLiveData<List<ShopItem>>()
     private val shopList = mutableListOf<ShopItem>()
 
+    init {
+        for(i in 0 until 10){
+            val item = ShopItem("Item $i",  true, i)
+            addItem(item)
+        }
+    }
+
     private var autoId = 0
 
     override fun addItem(shopItem: ShopItem) {
@@ -29,14 +36,14 @@ object ShopListRepositoryImpl: ShopListRepository {
 
     override fun getItemById(id: Int): ShopItem {
         return shopList
-            .find{id == it.id }
+            .find{it.id == id}
             ?: throw RuntimeException("Element with id $id not found")
     }
 
     override fun editItem(shopItem: ShopItem) {
         val oldItem  = getItemById(shopItem.id)
         shopList.remove(oldItem)
-        shopList.add(shopItem)
+        addItem(shopItem)
     }
 
     override fun getShopList(): LiveData<List<ShopItem>> {
