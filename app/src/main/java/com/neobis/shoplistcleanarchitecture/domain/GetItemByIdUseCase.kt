@@ -1,6 +1,6 @@
 package com.neobis.shoplistcleanarchitecture.domain
 
-class GetItemById {
+class GetItemByIdUseCase {
     fun getItemById(id: Int): ShopItem{
         TODO()
     }

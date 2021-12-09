@@ -1,7 +1,7 @@
 package com.neobis.shoplistcleanarchitecture.domain
 
 class DeleteItemUseCase {
-    fun deleteItem(){
+    fun deleteItem(shopItem: ShopItem){
         TODO()
     }
 }
