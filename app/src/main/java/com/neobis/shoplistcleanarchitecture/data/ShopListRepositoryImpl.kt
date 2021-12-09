@@ -1,11 +1,14 @@
 package com.neobis.shoplistcleanarchitecture.data
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.neobis.shoplistcleanarchitecture.domain.ShopItem
 import com.neobis.shoplistcleanarchitecture.domain.ShopListRepository
 import java.lang.RuntimeException
 
 object ShopListRepositoryImpl: ShopListRepository {
 
+    private var shopListLD= MutableLiveData<List<ShopItem>>()
     private val shopList = mutableListOf<ShopItem>()
 
     private var autoId = 0
@@ -16,10 +19,12 @@ object ShopListRepositoryImpl: ShopListRepository {
             autoId++
         }
         shopList.add(shopItem)
+        updateList()
     }
 
     override fun deleteItem(shopItem: ShopItem) {
         shopList.remove(shopItem)
+        updateList()
     }
 
     override fun getItemById(id: Int): ShopItem {
@@ -34,7 +39,11 @@ object ShopListRepositoryImpl: ShopListRepository {
         shopList.add(shopItem)
     }
 
-    override fun getShopList(): List<ShopItem> {
-        return shopList.toList()
+    override fun getShopList(): LiveData<List<ShopItem>> {
+        return shopListLD
+    }
+
+   private fun updateList(){
+        shopListLD.value = shopList.toList()
     }
 }

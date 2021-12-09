@@ -12,7 +12,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
-        viewModel.getShopList()
+
         viewModel.shopList.observe(this){
             Log.d("MainAct", it.toString())
         }
