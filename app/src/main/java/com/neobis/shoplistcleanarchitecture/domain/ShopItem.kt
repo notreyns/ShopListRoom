@@ -1,8 +1,12 @@
 package com.neobis.shoplistcleanarchitecture.domain
 
 data class ShopItem(
-    val id: Int,
     val name: String,
     val isActive: Boolean,
-    val counter: Int
-)
+    val counter: Int,
+    var id: Int = UNDEFINED_ID
+){
+    companion object{
+        const val UNDEFINED_ID = -1
+    }
+}
