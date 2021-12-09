@@ -1,7 +1,7 @@
 package com.neobis.shoplistcleanarchitecture.domain
 
-class EditItemUseCase {
+class EditItemUseCase(private val repository: ShopListRepository) {
     fun editItem(shopItem: ShopItem){
-        TODO()
+        repository.editItem(shopItem)
     }
 }

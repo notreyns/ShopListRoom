@@ -1,7 +1,7 @@
 package com.neobis.shoplistcleanarchitecture.domain
 
-class AddItemUseCase {
+class AddItemUseCase(private val repository: ShopListRepository) {
     fun addItem(shopItem: ShopItem){
-        TODO()
+        repository.addItem(shopItem)
     }
 }

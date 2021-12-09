@@ -1,7 +1,7 @@
 package com.neobis.shoplistcleanarchitecture.domain
 
-class GetItemByIdUseCase {
+class GetItemByIdUseCase(private val repository: ShopListRepository) {
     fun getItemById(id: Int): ShopItem{
-        TODO()
+        return repository.getItemById(id)
     }
 }

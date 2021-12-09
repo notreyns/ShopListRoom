@@ -1,7 +1,7 @@
 package com.neobis.shoplistcleanarchitecture.domain
 
-class DeleteItemUseCase {
+class DeleteItemUseCase(private val repository: ShopListRepository) {
     fun deleteItem(shopItem: ShopItem){
-        TODO()
+        repository.deleteItem(shopItem)
     }
 }
