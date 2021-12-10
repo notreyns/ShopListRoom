@@ -41,11 +41,14 @@ class ShopListAdapter : RecyclerView.Adapter<ShopListAdapter.ShopListViewHolder>
             holder.tvName.text = "${itemView.name} $status"
             holder.tvCount.text = itemView.counter.toString()
             holder.tvName.setTextColor(ContextCompat.getColor(holder.view.context,R.color.purple_200 ))
-        }else{
-            holder.tvName.text = ""
-            holder.tvCount.text = ""
-            holder.tvName.setTextColor(ContextCompat.getColor(holder.view.context,R.color.white ))
         }
+    }
+
+    override fun onViewRecycled(holder: ShopListViewHolder) {
+        super.onViewRecycled(holder)
+        holder.tvName.text = ""
+        holder.tvCount.text = ""
+        holder.tvName.setTextColor(ContextCompat.getColor(holder.view.context,R.color.white ))
     }
 
     override fun getItemCount(): Int {
