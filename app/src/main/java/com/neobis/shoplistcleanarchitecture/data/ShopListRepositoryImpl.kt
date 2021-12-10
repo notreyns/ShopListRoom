@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import com.neobis.shoplistcleanarchitecture.domain.ShopItem
 import com.neobis.shoplistcleanarchitecture.domain.ShopListRepository
 import java.lang.RuntimeException
+import kotlin.random.Random
 
 object ShopListRepositoryImpl: ShopListRepository {
 
@@ -12,8 +13,8 @@ object ShopListRepositoryImpl: ShopListRepository {
     private val shopList = sortedSetOf<ShopItem>( { p0, p1 ->p0.id.compareTo(p1.id) })
 
     init {
-        for(i in 0 until 10){
-            val item = ShopItem("Item $i",  true, i)
+        for(i in 0 until 1000){
+            val item = ShopItem("Item $i",  Random.nextBoolean(), i)
             addItem(item)
         }
     }
