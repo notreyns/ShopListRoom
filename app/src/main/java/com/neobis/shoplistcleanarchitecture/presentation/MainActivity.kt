@@ -13,7 +13,7 @@ import com.neobis.shoplistcleanarchitecture.domain.ShopItem
 
 class MainActivity : AppCompatActivity() {
     private lateinit var viewModel: MainViewModel
-    private lateinit var adapter: ShopListAdapter
+    private lateinit var shopListAdapter: ShopListAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,17 +23,20 @@ class MainActivity : AppCompatActivity() {
 
         viewModel.shopList.observe(this){
             Log.d("MainAct", it.toString())
-            adapter.shopList = it
+            shopListAdapter.shopList = it
         }
 
     }
 
     private fun setupRecyclerView() {
         val recView = findViewById<RecyclerView>(R.id.list_rv)
-        adapter = ShopListAdapter()
-        recView.adapter = adapter
-        recView.recycledViewPool.setMaxRecycledViews(ShopListAdapter.VIEW_TYPE_ENABLED, ShopListAdapter.MAX_POOL_SIZE)
-        recView.recycledViewPool.setMaxRecycledViews(ShopListAdapter.VIEW_TYPE_DISABLED, ShopListAdapter.MAX_POOL_SIZE)
+        with(recView){
+            shopListAdapter = ShopListAdapter()
+            adapter = shopListAdapter
+            recycledViewPool.setMaxRecycledViews(ShopListAdapter.VIEW_TYPE_ENABLED, ShopListAdapter.MAX_POOL_SIZE)
+            recycledViewPool.setMaxRecycledViews(ShopListAdapter.VIEW_TYPE_DISABLED, ShopListAdapter.MAX_POOL_SIZE)
+        }
+
     }
 
 
