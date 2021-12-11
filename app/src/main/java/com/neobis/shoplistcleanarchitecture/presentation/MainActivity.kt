@@ -36,6 +36,12 @@ class MainActivity : AppCompatActivity() {
             recycledViewPool.setMaxRecycledViews(ShopListAdapter.VIEW_TYPE_ENABLED, ShopListAdapter.MAX_POOL_SIZE)
             recycledViewPool.setMaxRecycledViews(ShopListAdapter.VIEW_TYPE_DISABLED, ShopListAdapter.MAX_POOL_SIZE)
         }
+        shopListAdapter.onShopClickListener = object: ShopListAdapter.OnShopClickListener{
+            override fun onShopLongClick(shopItem: ShopItem) {
+                viewModel.editShopItem(shopItem)
+            }
+
+        }
 
     }
 

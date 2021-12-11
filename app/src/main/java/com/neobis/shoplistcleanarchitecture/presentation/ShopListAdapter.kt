@@ -21,6 +21,8 @@ class ShopListAdapter : RecyclerView.Adapter<ShopListAdapter.ShopListViewHolder>
             notifyDataSetChanged()
         }
 
+    var onShopClickListener: OnShopClickListener? = null
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ShopListViewHolder {
         Log.d("ShopListAdapter", "${++count}")
         val layout = when (viewType) {
@@ -43,6 +45,7 @@ class ShopListAdapter : RecyclerView.Adapter<ShopListAdapter.ShopListViewHolder>
         holder.tvName.text = itemView.name
         holder.tvCount.text = itemView.counter.toString()
         holder.view.setOnLongClickListener {
+            onShopClickListener?.onShopLongClick(itemView)
             true
         }
 
@@ -64,6 +67,10 @@ class ShopListAdapter : RecyclerView.Adapter<ShopListAdapter.ShopListViewHolder>
         const val VIEW_TYPE_DISABLED = 2
 
         const val MAX_POOL_SIZE = 15
+    }
+
+    interface OnShopClickListener{
+        fun onShopLongClick(shopItem: ShopItem)
     }
 
     override fun onViewRecycled(holder: ShopListViewHolder) {
