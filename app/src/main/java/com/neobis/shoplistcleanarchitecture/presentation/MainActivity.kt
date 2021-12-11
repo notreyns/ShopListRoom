@@ -21,7 +21,7 @@ class MainActivity : AppCompatActivity() {
         setupRecyclerView()
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
 
-        viewModel.shopList.observe(this){
+        viewModel.shopList.observe(this) {
             Log.d("MainAct", it.toString())
             shopListAdapter.shopList = it
         }
@@ -30,20 +30,24 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupRecyclerView() {
         val recView = findViewById<RecyclerView>(R.id.list_rv)
-        with(recView){
+        with(recView) {
             shopListAdapter = ShopListAdapter()
             adapter = shopListAdapter
-            recycledViewPool.setMaxRecycledViews(ShopListAdapter.VIEW_TYPE_ENABLED, ShopListAdapter.MAX_POOL_SIZE)
-            recycledViewPool.setMaxRecycledViews(ShopListAdapter.VIEW_TYPE_DISABLED, ShopListAdapter.MAX_POOL_SIZE)
+            recycledViewPool.setMaxRecycledViews(
+                ShopListAdapter.VIEW_TYPE_ENABLED,
+                ShopListAdapter.MAX_POOL_SIZE
+            )
+            recycledViewPool.setMaxRecycledViews(
+                ShopListAdapter.VIEW_TYPE_DISABLED,
+                ShopListAdapter.MAX_POOL_SIZE
+            )
         }
-        shopListAdapter.onShopClickListener = object: ShopListAdapter.OnShopClickListener{
-            override fun onShopLongClick(shopItem: ShopItem) {
-                viewModel.editShopItem(shopItem)
-            }
-
+        shopListAdapter.onShopClickListener = {
+            viewModel.editShopItem(it)
         }
 
     }
 
-
 }
+
+

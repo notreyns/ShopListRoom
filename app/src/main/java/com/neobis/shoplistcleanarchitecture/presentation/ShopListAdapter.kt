@@ -21,7 +21,7 @@ class ShopListAdapter : RecyclerView.Adapter<ShopListAdapter.ShopListViewHolder>
             notifyDataSetChanged()
         }
 
-    var onShopClickListener: OnShopClickListener? = null
+    var onShopClickListener: ((ShopItem)-> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ShopListViewHolder {
         Log.d("ShopListAdapter", "${++count}")
@@ -45,7 +45,7 @@ class ShopListAdapter : RecyclerView.Adapter<ShopListAdapter.ShopListViewHolder>
         holder.tvName.text = itemView.name
         holder.tvCount.text = itemView.counter.toString()
         holder.view.setOnLongClickListener {
-            onShopClickListener?.onShopLongClick(itemView)
+            onShopClickListener?.invoke(itemView)
             true
         }
 
