@@ -1,5 +1,6 @@
 package com.neobis.shoplistcleanarchitecture.presentation
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,9 +10,11 @@ import androidx.core.content.res.ComplexColorCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.neobis.shoplistcleanarchitecture.R
 import com.neobis.shoplistcleanarchitecture.domain.ShopItem
+import java.lang.RuntimeException
 
 class ShopListAdapter : RecyclerView.Adapter<ShopListAdapter.ShopListViewHolder>() {
 
+    var count = 0
     var shopList = listOf<ShopItem>()
         set(value) {
             field = value
@@ -19,11 +22,19 @@ class ShopListAdapter : RecyclerView.Adapter<ShopListAdapter.ShopListViewHolder>
         }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ShopListViewHolder {
+        Log.d("ShopListAdapter", "${++count}")
+        val layout = when (viewType) {
+            VIEW_TYPE_ENABLED -> R.layout.shop_item_enabled
+            VIEW_TYPE_DISABLED -> R.layout.shop_item_disabled
+            else -> throw RuntimeException("Unknown view type : ${viewType}")
+        }
+
         val view = LayoutInflater.from(parent.context).inflate(
-            R.layout.shop_item_disabled,
+            layout,
             parent,
             false
         )
+
         return ShopListViewHolder(view)
     }
 
@@ -34,21 +45,32 @@ class ShopListAdapter : RecyclerView.Adapter<ShopListAdapter.ShopListViewHolder>
         holder.view.setOnLongClickListener {
             true
         }
-        var status = if(itemView.isActive){
-            "Active"
-        }else "Not Active"
-        if(itemView.isActive){
-            holder.tvName.text = "${itemView.name} $status"
-            holder.tvCount.text = itemView.counter.toString()
-            holder.tvName.setTextColor(ContextCompat.getColor(holder.view.context,R.color.purple_200 ))
+
+        holder.tvName.text = itemView.name
+        holder.tvCount.text = itemView.counter.toString()
+
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        if (shopList[position].isActive) {
+            return VIEW_TYPE_ENABLED
+        } else {
+            return VIEW_TYPE_DISABLED
         }
+    }
+
+    companion object {
+        const val VIEW_TYPE_ENABLED = 1
+        const val VIEW_TYPE_DISABLED = 2
+
+        const val MAX_POOL_SIZE = 15
     }
 
     override fun onViewRecycled(holder: ShopListViewHolder) {
         super.onViewRecycled(holder)
         holder.tvName.text = ""
         holder.tvCount.text = ""
-        holder.tvName.setTextColor(ContextCompat.getColor(holder.view.context,R.color.white ))
+        holder.tvName.setTextColor(ContextCompat.getColor(holder.view.context, R.color.white))
     }
 
     override fun getItemCount(): Int {
