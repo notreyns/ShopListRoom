@@ -22,6 +22,7 @@ class ShopListAdapter : RecyclerView.Adapter<ShopListAdapter.ShopListViewHolder>
         }
 
     var onShopClickListener: ((ShopItem)-> Unit)? = null
+    var onShopLongClickListener: ((ShopItem)-> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ShopListViewHolder {
         Log.d("ShopListAdapter", "${++count}")
@@ -45,8 +46,12 @@ class ShopListAdapter : RecyclerView.Adapter<ShopListAdapter.ShopListViewHolder>
         holder.tvName.text = itemView.name
         holder.tvCount.text = itemView.counter.toString()
         holder.view.setOnLongClickListener {
-            onShopClickListener?.invoke(itemView)
+            onShopLongClickListener?.invoke(itemView)
             true
+        }
+
+        holder.view.setOnClickListener {
+            onShopClickListener?.invoke(itemView)
         }
 
         holder.tvName.text = itemView.name
@@ -69,9 +74,6 @@ class ShopListAdapter : RecyclerView.Adapter<ShopListAdapter.ShopListViewHolder>
         const val MAX_POOL_SIZE = 15
     }
 
-    interface OnShopClickListener{
-        fun onShopLongClick(shopItem: ShopItem)
-    }
 
     override fun onViewRecycled(holder: ShopListViewHolder) {
         super.onViewRecycled(holder)

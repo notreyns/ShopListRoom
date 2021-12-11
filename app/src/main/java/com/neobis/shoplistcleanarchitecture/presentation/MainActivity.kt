@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.neobis.shoplistcleanarchitecture.R
 import com.neobis.shoplistcleanarchitecture.domain.ShopItem
@@ -22,7 +23,7 @@ class MainActivity : AppCompatActivity() {
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
 
         viewModel.shopList.observe(this) {
-            Log.d("MainAct", it.toString())
+          //  Log.d("MainAct", it.toString())
             shopListAdapter.shopList = it
         }
 
@@ -42,10 +43,46 @@ class MainActivity : AppCompatActivity() {
                 ShopListAdapter.MAX_POOL_SIZE
             )
         }
-        shopListAdapter.onShopClickListener = {
-            viewModel.editShopItem(it)
+        setupClickListener()
+        setupOnLongClickListener()
+        setupSwipeListener(recView)
+    }
+
+    private fun setupSwipeListener(recView: RecyclerView) {
+        val callback = object : ItemTouchHelper.SimpleCallback(
+            0,
+            ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
+        ) {
+            override fun onMove(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                target: RecyclerView.ViewHolder
+            ): Boolean {
+                return false
+            }
+
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                val item = shopListAdapter.shopList[viewHolder.adapterPosition]
+                viewModel.deleteShopItem(item)
+                shopListAdapter.notifyItemRemoved(viewHolder.adapterPosition)
+            }
+
         }
 
+        val touchHelper = ItemTouchHelper(callback)
+        touchHelper.attachToRecyclerView(recView)
+    }
+
+    private fun setupOnLongClickListener() {
+        shopListAdapter.onShopLongClickListener = {
+            viewModel.editShopItem(it)
+        }
+    }
+
+    private fun setupClickListener() {
+        shopListAdapter.onShopClickListener = {
+            Log.d("MainAct", it.toString())
+        }
     }
 
 }
