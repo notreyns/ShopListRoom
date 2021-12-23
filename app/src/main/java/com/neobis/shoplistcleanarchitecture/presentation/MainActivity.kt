@@ -1,5 +1,6 @@
 package com.neobis.shoplistcleanarchitecture.presentation
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -9,6 +10,7 @@ import android.widget.TextView
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.neobis.shoplistcleanarchitecture.R
 import com.neobis.shoplistcleanarchitecture.domain.ShopItem
 
@@ -24,6 +26,10 @@ class MainActivity : AppCompatActivity() {
 
         viewModel.shopList.observe(this) {
             shopListAdapter.submitList(it)
+        }
+        findViewById<FloatingActionButton>(R.id.add_item_btn).setOnClickListener{
+            val intent = Intent(this,ShopItemActivity::class.java)
+            startActivity(intent)
         }
 
     }
