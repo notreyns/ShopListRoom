@@ -13,7 +13,7 @@ object ShopListRepositoryImpl: ShopListRepository {
     private val shopList = sortedSetOf<ShopItem>( { p0, p1 ->p0.id.compareTo(p1.id) })
 
     init {
-        for(i in 0 until 1000){
+        for(i in 0 until 10){
             val item = ShopItem("Item $i",  Random.nextBoolean(), i)
             addItem(item)
         }

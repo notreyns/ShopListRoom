@@ -45,7 +45,8 @@ class ShopItemViewModel: ViewModel() {
     }
 
     fun getItem(id: Int){
-        getItemUseCase.getItemById(id)
+        val item =getItemUseCase.getItemById(id)
+        _shopItem.value = item
     }
 
     fun editItem(inputName: String? , inputCount : String?){

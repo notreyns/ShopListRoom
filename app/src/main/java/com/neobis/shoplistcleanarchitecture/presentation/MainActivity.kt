@@ -13,6 +13,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.neobis.shoplistcleanarchitecture.R
 import com.neobis.shoplistcleanarchitecture.domain.ShopItem
+import com.neobis.shoplistcleanarchitecture.presentation.ShopItemActivity.Companion.newIntentAddItem
+import com.neobis.shoplistcleanarchitecture.presentation.ShopItemActivity.Companion.newIntentEditItem
 
 class MainActivity : AppCompatActivity() {
     private lateinit var viewModel: MainViewModel
@@ -28,8 +30,7 @@ class MainActivity : AppCompatActivity() {
             shopListAdapter.submitList(it)
         }
         findViewById<FloatingActionButton>(R.id.add_item_btn).setOnClickListener{
-            val intent = Intent(this,ShopItemActivity::class.java)
-            startActivity(intent)
+            startActivity(newIntentAddItem(this))
         }
 
     }
@@ -86,6 +87,7 @@ class MainActivity : AppCompatActivity() {
     private fun setupClickListener() {
         shopListAdapter.onShopClickListener = {
             Log.d("MainAct", it.toString())
+            startActivity(newIntentEditItem(this, it.id))
         }
     }
 
