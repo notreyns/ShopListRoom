@@ -17,10 +17,7 @@ import com.neobis.shoplistcleanarchitecture.R
 import com.neobis.shoplistcleanarchitecture.domain.ShopItem
 
 
-class ShopItemFragment(
-    private var screenMode: String = UNKNOWN_MODE,
-    private var shopItemId: Int = ShopItem.UNDEFINED_ID
-) : Fragment() {
+class ShopItemFragment : Fragment() {
     private lateinit var viewModel: ShopItemViewModel
 
 
@@ -30,7 +27,8 @@ class ShopItemFragment(
     private lateinit var et_count: EditText
     private lateinit var saveButton: Button
 
-
+    private var screenMode: String = UNKNOWN_MODE
+    private var shopItemId: Int = ShopItem.UNDEFINED_ID
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -129,11 +127,20 @@ class ShopItemFragment(
     }
 
     private fun parseMode() {
-        if (screenMode != MODE_EDIT && screenMode != MODE_ADD) {
+        val args = requireArguments()
+        if (!args.containsKey(EXTRA_SCREEN_MODE)) {
+            throw RuntimeException("Param mode is absent")
+        }
+        val mode = args.getString(EXTRA_SCREEN_MODE)
+        if (mode != MODE_EDIT && mode !=MODE_ADD) {
             throw RuntimeException("Mode is unknown")
         }
-        if (screenMode == MODE_EDIT && shopItemId == ShopItem.UNDEFINED_ID) {
-            throw RuntimeException("Param shop id is absent")
+        screenMode = mode
+        if (screenMode == MODE_EDIT) {
+            if (!args.containsKey(EXTRA_SHOP_ID)) {
+                throw RuntimeException("Param shop id is absent")
+            }
+            shopItemId =args.getInt(EXTRA_SHOP_ID, ShopItem.UNDEFINED_ID)
         }
     }
 
@@ -144,17 +151,6 @@ class ShopItemFragment(
         private const val EXTRA_SHOP_ID = "extra_shop_item_id"
         private const val UNKNOWN_MODE = ""
 
-        fun newIntentAddItem(context: Context): Intent {
-            val intent = Intent(context, ShopItemActivity::class.java)
-            intent.putExtra(EXTRA_SCREEN_MODE, MODE_ADD)
-            return intent
-        }
 
-        fun newIntentEditItem(context: Context, shopItemId: Int): Intent {
-            val intent = Intent(context, ShopItemActivity::class.java)
-            intent.putExtra(EXTRA_SCREEN_MODE, MODE_EDIT)
-            intent.putExtra(EXTRA_SHOP_ID, shopItemId)
-            return intent
-        }
     }
 }
