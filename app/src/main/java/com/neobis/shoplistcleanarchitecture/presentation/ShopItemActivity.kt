@@ -7,7 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.neobis.shoplistcleanarchitecture.R
 import com.neobis.shoplistcleanarchitecture.domain.ShopItem
 
-class ShopItemActivity : AppCompatActivity() {
+class ShopItemActivity : AppCompatActivity(), ShopItemFragment.OnEditingFinishedListener {
     private var screenMode = UNKNOWN_MODE
     private var shopItemId = ShopItem.UNDEFINED_ID
 
@@ -82,6 +82,10 @@ class ShopItemActivity : AppCompatActivity() {
             intent.putExtra(EXTRA_SHOP_ID, shopItemId)
             return intent
         }
+    }
+
+    override fun onEditingFinished() {
+        finish()
     }
 
 }

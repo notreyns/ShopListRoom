@@ -20,6 +20,7 @@ import com.neobis.shoplistcleanarchitecture.domain.ShopItem
 class ShopItemFragment : Fragment() {
     private lateinit var viewModel: ShopItemViewModel
 
+    private lateinit var onEditingFinishedListener: OnEditingFinishedListener
 
     private lateinit var til_name: TextInputLayout
     private lateinit var til_count: TextInputLayout
@@ -35,6 +36,15 @@ class ShopItemFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(R.layout.fragment_shop_item, container, false)
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if(context is OnEditingFinishedListener){
+            onEditingFinishedListener = context
+        } else {
+            throw java.lang.RuntimeException("Activity must implement OnEditingFinishedListener")
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -142,6 +152,10 @@ class ShopItemFragment : Fragment() {
             }
             shopItemId =args.getInt(EXTRA_SHOP_ID, ShopItem.UNDEFINED_ID)
         }
+    }
+
+    interface OnEditingFinishedListener{
+        fun onEditingFinished()
     }
 
     companion object {
