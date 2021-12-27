@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -30,31 +31,75 @@ class ShopItemFragment : Fragment() {
 
     private var screenMode: String = UNKNOWN_MODE
     private var shopItemId: Int = ShopItem.UNDEFINED_ID
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_shop_item, container, false)
-    }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
+        Log.d("Fragment", "onAttach")
         if(context is OnEditingFinishedListener){
             onEditingFinishedListener = context
         } else {
             throw java.lang.RuntimeException("Activity must implement OnEditingFinishedListener")
         }
     }
+    override fun onCreate(savedInstanceState: Bundle?) {
+        Log.d("Fragment", "onCreate")
+        super.onCreate(savedInstanceState)
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        Log.d("Fragment", "ONcreateView")
+        return inflater.inflate(R.layout.fragment_shop_item, container, false)
+    }
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        Log.d("Fragment", "OnViewCreated")
         parseMode()
         initViews(view)
         viewModel = ViewModelProvider(this)[ShopItemViewModel::class.java]
         launchRightScreen()
         showInputError()
         viewModelObservers()
+    }
+
+    override fun onStart() {
+        super.onStart()
+        Log.d("Fragment", "onStart")
+    }
+
+    override fun onResume() {
+        super.onResume()
+        Log.d("Fragment", "onResume")
+    }
+
+    override fun onPause() {
+        super.onPause()
+        Log.d("Fragment", "onPause")
+    }
+
+    override fun onStop() {
+        super.onStop()
+        Log.d("Fragment", "onStop")
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        Log.d("Fragment", "onDestroyView")
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.d("Fragment", "onDestroy")
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        Log.d("Fragment", "onDetach")
     }
 
     private fun launchRightScreen() {
