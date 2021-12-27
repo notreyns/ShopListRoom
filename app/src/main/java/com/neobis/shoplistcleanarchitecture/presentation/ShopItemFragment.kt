@@ -151,6 +151,20 @@ class ShopItemFragment : Fragment() {
         private const val EXTRA_SHOP_ID = "extra_shop_item_id"
         private const val UNKNOWN_MODE = ""
 
-
+        fun newInstanceAddFragment(): ShopItemFragment{
+            return ShopItemFragment().apply {
+                arguments = Bundle().apply {
+                    putString(EXTRA_SCREEN_MODE,MODE_ADD)
+                }
+            }
+        }
+        fun newInstanceEditFragment(shopItemId: Int): ShopItemFragment{
+            return ShopItemFragment().apply {
+                arguments = Bundle().apply {
+                    putString(EXTRA_SCREEN_MODE, MODE_EDIT)
+                    putInt(EXTRA_SHOP_ID, shopItemId)
+                }
+            }
+        }
     }
 }
