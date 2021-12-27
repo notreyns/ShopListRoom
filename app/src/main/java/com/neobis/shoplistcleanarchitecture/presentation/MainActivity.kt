@@ -1,28 +1,26 @@
 package com.neobis.shoplistcleanarchitecture.presentation
 
-import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
-import android.view.LayoutInflater
-import android.widget.LinearLayout
-import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentContainerView
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.neobis.shoplistcleanarchitecture.R
-import com.neobis.shoplistcleanarchitecture.domain.ShopItem
 import com.neobis.shoplistcleanarchitecture.presentation.ShopItemActivity.Companion.newIntentAddItem
 import com.neobis.shoplistcleanarchitecture.presentation.ShopItemActivity.Companion.newIntentEditItem
 
 class MainActivity : AppCompatActivity() {
     private lateinit var viewModel: MainViewModel
     private lateinit var shopListAdapter: ShopListAdapter
+    private var shopItemContainer : FragmentContainerView? =null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        shopItemContainer = findViewById(R.id.shop_item_container)
         setupRecyclerView()
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
 
@@ -30,9 +28,24 @@ class MainActivity : AppCompatActivity() {
             shopListAdapter.submitList(it)
         }
         findViewById<FloatingActionButton>(R.id.add_item_btn).setOnClickListener{
-            startActivity(newIntentAddItem(this))
+            if (isOnePaneMode()) {
+                startActivity(newIntentAddItem(this))
+            } else {
+                launchLandscapeModeFragment(ShopItemFragment.newInstanceAddFragment())
+            }
         }
 
+    }
+    private fun isOnePaneMode(): Boolean{
+        return shopItemContainer == null;
+    }
+
+    private fun launchLandscapeModeFragment(fragment: Fragment){
+        supportFragmentManager.popBackStack()
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.shop_item_container, fragment)
+            .addToBackStack(null)
+            .commit()
     }
 
     private fun setupRecyclerView() {
@@ -80,14 +93,18 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupOnLongClickListener() {
         shopListAdapter.onShopLongClickListener = {
+
             viewModel.editShopItem(it)
         }
     }
 
     private fun setupClickListener() {
         shopListAdapter.onShopClickListener = {
-            Log.d("MainAct", it.toString())
-            startActivity(newIntentEditItem(this, it.id))
+            if (isOnePaneMode()) {
+                startActivity(newIntentEditItem(this, it.id))
+            } else {
+                launchLandscapeModeFragment(ShopItemFragment.newInstanceEditFragment(it.id))
+            }
         }
     }
 
