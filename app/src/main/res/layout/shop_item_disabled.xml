@@ -1,36 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    app:cardCornerRadius="4dp"
-    app:cardElevation="1dp"
-    android:layout_marginHorizontal="8dp"
-    android:layout_marginVertical="4dp"
-    app:cardUseCompatPadding="true"
-    android:layout_height="wrap_content">
-    <LinearLayout
-        android:paddingVertical="18dp"
-        android:orientation="horizontal"
-        android:paddingHorizontal="16dp"
-        android:background="#E2D5E3"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <TextView
-            android:id="@+id/tv_name"
-            android:layout_width="0dp"
-            android:layout_weight= "1"
-            android:layout_height="wrap_content"
-            android:text="Item 1"
-            android:textColor="@color/white"
-            android:textSize="18sp"/>
-        <TextView
-            android:id="@+id/tv_count"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="2"
-            android:textColor="@color/white"
-            android:textSize="18sp"
-            />
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    </LinearLayout>
-</androidx.cardview.widget.CardView>
+    <data>
+
+    </data>
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        app:cardCornerRadius="4dp"
+        app:cardElevation="1dp"
+        android:layout_marginHorizontal="8dp"
+        android:layout_marginVertical="4dp"
+        app:cardUseCompatPadding="true"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:paddingVertical="18dp"
+            android:orientation="horizontal"
+            android:paddingHorizontal="16dp"
+            android:background="#E2D5E3"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/tv_name"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="Item 1"
+                android:textColor="@color/white"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/tv_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="2"
+                android:textColor="@color/white"
+                android:textSize="18sp" />
+
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+</layout>
