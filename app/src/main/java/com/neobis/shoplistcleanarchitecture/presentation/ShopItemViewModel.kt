@@ -1,5 +1,7 @@
 package com.neobis.shoplistcleanarchitecture.presentation
 
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -8,15 +10,18 @@ import com.neobis.shoplistcleanarchitecture.domain.AddItemUseCase
 import com.neobis.shoplistcleanarchitecture.domain.EditItemUseCase
 import com.neobis.shoplistcleanarchitecture.domain.GetItemByIdUseCase
 import com.neobis.shoplistcleanarchitecture.domain.ShopItem
+import kotlinx.coroutines.*
 import java.lang.Exception
 
-class ShopItemViewModel: ViewModel() {
+class ShopItemViewModel(application: Application): AndroidViewModel(application) {
 
-    private val repository = ShopListRepositoryImpl
+    private val repository = ShopListRepositoryImpl(application)
 
     private val addItemUseCase = AddItemUseCase(repository)
     private val editItemUseCase = EditItemUseCase(repository)
     private val getItemUseCase = GetItemByIdUseCase(repository)
+
+    private val scope = CoroutineScope(Dispatchers.IO)
 
     private var _errorInputName = MutableLiveData<Boolean>()
     val errorInputName : LiveData<Boolean>
@@ -39,14 +44,20 @@ class ShopItemViewModel: ViewModel() {
         val count = parseCount(inputCount)
         val fieldValid = validateInput(name, count)
         if(fieldValid){
-            addItemUseCase.addItem(ShopItem(name,true, count))
-            finishWork()
+            scope.launch {
+                addItemUseCase.addItem(ShopItem(name,true, count))
+                finishWork()
+            }
+
         }
     }
 
     fun getItem(id: Int){
-        val item =getItemUseCase.getItemById(id)
-        _shopItem.value = item
+        scope.launch {
+            val item =getItemUseCase.getItemById(id)
+            _shopItem.value = item
+        }
+
     }
 
     fun editItem(inputName: String? , inputCount : String?){
@@ -55,11 +66,12 @@ class ShopItemViewModel: ViewModel() {
         val fieldValid = validateInput(name, count)
         if(fieldValid){
             _shopItem.value?.let {
-                val item =it.copy(name = name, counter = count)
-                editItemUseCase.editItem(item)
-                finishWork()
+                scope.launch {
+                    val item =it.copy(name = name, counter = count)
+                    editItemUseCase.editItem(item)
+                    finishWork()
+                }
             }
-
         }
     }
 
@@ -96,5 +108,10 @@ class ShopItemViewModel: ViewModel() {
     }
     private fun finishWork(){
         _shouldCloseScreen.value = true
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        scope.cancel()
     }
 }
