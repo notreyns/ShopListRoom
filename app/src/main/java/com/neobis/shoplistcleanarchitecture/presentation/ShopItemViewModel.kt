@@ -1,10 +1,7 @@
 package com.neobis.shoplistcleanarchitecture.presentation
 
 import android.app.Application
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
 import com.neobis.shoplistcleanarchitecture.data.ShopListRepositoryImpl
 import com.neobis.shoplistcleanarchitecture.domain.AddItemUseCase
 import com.neobis.shoplistcleanarchitecture.domain.EditItemUseCase
@@ -20,8 +17,6 @@ class ShopItemViewModel(application: Application): AndroidViewModel(application)
     private val addItemUseCase = AddItemUseCase(repository)
     private val editItemUseCase = EditItemUseCase(repository)
     private val getItemUseCase = GetItemByIdUseCase(repository)
-
-    private val scope = CoroutineScope(Dispatchers.IO)
 
     private var _errorInputName = MutableLiveData<Boolean>()
     val errorInputName : LiveData<Boolean>
@@ -44,7 +39,7 @@ class ShopItemViewModel(application: Application): AndroidViewModel(application)
         val count = parseCount(inputCount)
         val fieldValid = validateInput(name, count)
         if(fieldValid){
-            scope.launch {
+            viewModelScope.launch {
                 addItemUseCase.addItem(ShopItem(name,true, count))
                 finishWork()
             }
@@ -53,7 +48,7 @@ class ShopItemViewModel(application: Application): AndroidViewModel(application)
     }
 
     fun getItem(id: Int){
-        scope.launch {
+        viewModelScope.launch {
             val item =getItemUseCase.getItemById(id)
             _shopItem.value = item
         }
@@ -66,7 +61,7 @@ class ShopItemViewModel(application: Application): AndroidViewModel(application)
         val fieldValid = validateInput(name, count)
         if(fieldValid){
             _shopItem.value?.let {
-                scope.launch {
+                viewModelScope.launch {
                     val item =it.copy(name = name, counter = count)
                     editItemUseCase.editItem(item)
                     finishWork()
@@ -108,10 +103,5 @@ class ShopItemViewModel(application: Application): AndroidViewModel(application)
     }
     private fun finishWork(){
         _shouldCloseScreen.value = true
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        scope.cancel()
     }
 }

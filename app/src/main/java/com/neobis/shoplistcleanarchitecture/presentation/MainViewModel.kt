@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.neobis.shoplistcleanarchitecture.data.ShopListRepositoryImpl
 import com.neobis.shoplistcleanarchitecture.domain.DeleteItemUseCase
 import com.neobis.shoplistcleanarchitecture.domain.EditItemUseCase
@@ -23,25 +24,28 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     val shopList = getShopListUseCase.getShopList()
 
-    private val scope = CoroutineScope(Dispatchers.IO)
+
+    //Dispatchers.Main и viewModelScope равносильны
+    //private val scope = CoroutineScope(Dispatchers.Main)
 
     fun editShopItem(shopItem: ShopItem) {
-        scope.launch {
+        viewModelScope.launch {
             val newItem = shopItem.copy(isActive = !shopItem.isActive)
             editShopItemUseCase.editItem(newItem)
         }
     }
 
     fun deleteShopItem(shopItem: ShopItem) {
-        scope.launch {
+        viewModelScope.launch {
             deleteItemUseCase.deleteItem(shopItem)
         }
     }
 
-    override fun onCleared() {
+    //viewmodelscope самостоятельно очищается
+    /*override fun onCleared() {
         super.onCleared()
         scope.cancel()
-    }
+    }*/
 
 
 }
